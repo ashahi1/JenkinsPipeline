@@ -30,6 +30,6 @@ node("vdvs-slave-2") {
          * Second, the 'latest' tag.
          * Pushing multiple tags is cheap, as all the layers are reused. */
          
-         sh echo Tests finished"
+         sh "echo Tests finished"
     }
 }
