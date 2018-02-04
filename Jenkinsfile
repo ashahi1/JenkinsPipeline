@@ -14,6 +14,8 @@ node("vdvs-slave-2") {
         sh "git clone https://github.com/ashahi1/docker-volume-vsphere.git"
         sh "pwd"
         sh "ls"
+        sh "cd docker-volume-vsphere"
+        sh "ls"
     }
 
     stage('Test image') {
