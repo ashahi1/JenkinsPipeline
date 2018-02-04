@@ -12,7 +12,10 @@ node("vdvs-slave-2") {
         /* This builds the actual image; synonymous to
          * docker build on the command line */
 
-        app = docker.build("friendlyone")
+        #app = docker.build("friendlyone")
+        sh "git clone https://github.com/ashahi1/docker-volume-vsphere.git"
+        sh "pwd"
+        sh "ls"
     }
 
     stage('Test image') {
