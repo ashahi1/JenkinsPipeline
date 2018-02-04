@@ -18,6 +18,7 @@ node("vdvs-slave-two") {
         sh "cd root/var/jenkins/workspace/vdvs-pipeline/docker-volume-vsphere/"
         sh "pwd"
         sh "ls"
+        sh "make build-all"
         sh "echo FINISHED BUILDING IMAGE"
      
     }
@@ -37,5 +38,6 @@ node("vdvs-slave-two") {
          * Pushing multiple tags is cheap, as all the layers are reused. */
          
          sh "echo Pipeline finished"
+         sh "rm -fr docker-volume-vsphere/"
     }
 }
