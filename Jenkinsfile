@@ -1,4 +1,4 @@
-node("vdvs-slave-2") {
+node("vdvs-slave-two") {
 
     def app
 
