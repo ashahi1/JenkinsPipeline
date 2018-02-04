@@ -8,7 +8,7 @@ node("vdvs-slave-two") {
         checkout scm
     }
 
-    stage('Build image') {
+    stage('Build') {
         /* This builds the actual image; */
 
         sh "echo BUILDING IMAGE"
@@ -18,32 +18,34 @@ node("vdvs-slave-two") {
      
     }
 
-    stage('Deploy image') {
+    stage('Deploy') {
         /* This builds the actual image; */
 
         sh "echo DEPLOYING IMAGE"
         sh "ls"
-        sh "echo $ESX; echo $VM1; echo $VM2; echo $VM3;"
+        sh "echo ESX = $ESX; echo VM-1=$VM1; echo VM-2=$VM2; echo VM-3=$VM3;"
         sh "cd docker-volume-vsphere/; make deploy-all"
         sh "echo FINISHED DEPLOYING THE IMAGE"
 
     }
 
-    stage('Test image') {
+    stage('Executing End-to-End Tests') {
         /* Ideally, we would run a test framework against our image.
          * For this example, we're using a Volkswagen-type approach ;-) */
 
-            sh "echo TESTS PASSED"
+            sh "echo STARTING E2E TESTS"
+            sh "cd docker-volume-vsphere/; make test-e2e"
             
     }
 
-    stage('Result') {
+    stage('Cleanup') {
         /* Finally, we'll push the image with two tags:
          * First, the incremental build number from Jenkins
          * Second, the 'latest' tag.
          * Pushing multiple tags is cheap, as all the layers are reused. */
          
+         sh "echo CLEANUP"
+         sh "cd docker-volume-vsphere/; make clean-all; rm -fr docker-volume-vsphere/"
          sh "echo PIPELINE FINISHED"
-         sh "rm -fr docker-volume-vsphere/"
     }
 }
