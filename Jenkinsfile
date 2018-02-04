@@ -15,7 +15,7 @@ node("vdvs-slave-two") {
         sh "git clone https://github.com/ashahi1/docker-volume-vsphere.git"
         sh "pwd"
         sh "ls"
-        sh "cd root/var/jenkins/workspace/vdvs-pipeline/docker-volume-vsphere/"
+        sh "cd docker-volume-vsphere/"
         sh "pwd"
         sh "ls"
         sh "make build-all"
