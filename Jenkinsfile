@@ -1,35 +1,51 @@
-node("vdvs-slave-2") {
+node("vdvs-slave-two") {
 
     def app
 
     stage('Clone repository') {
-        /* Let's make sure we have the repository cloned to our workspace */
+        /* Let's make sure we have the repository cloned to our workspace. */
 
         checkout scm
     }
 
-    stage('Build image') {
-        /* This builds the actual image; synonymous to
-         * docker build on the command line */
+    stage('Build') {
+        /* This builds the actual image; */
 
-        app = docker.build("friendlyone")
+        sh "echo BUILDING IMAGE"
+        sh "git clone https://github.com/ashahi1/docker-volume-vsphere.git"
+        sh "cd docker-volume-vsphere/; make build-all"
+        sh "echo FINISHED BUILDING IMAGE"
+     
     }
 
-    stage('Test image') {
+    stage('Deploy') {
+        /* This builds the actual image; */
+
+        sh "echo DEPLOYING IMAGE"
+        sh "ls"
+        sh "echo ESX = $ESX; echo VM-1=$VM1; echo VM-2=$VM2; echo VM-3=$VM3;"
+        sh "cd docker-volume-vsphere/; make deploy-all"
+        sh "echo FINISHED DEPLOYING THE IMAGE"
+
+    }
+
+    stage('Executing End-to-End Tests') {
         /* Ideally, we would run a test framework against our image.
          * For this example, we're using a Volkswagen-type approach ;-) */
 
-        app.inside {
-            sh "echo Tests passed"
-        }
+            sh "echo STARTING E2E TESTS"
+            sh "cd docker-volume-vsphere/; make test-e2e"
+            
     }
 
-    stage('Result') {
+    stage('Cleanup') {
         /* Finally, we'll push the image with two tags:
          * First, the incremental build number from Jenkins
          * Second, the 'latest' tag.
          * Pushing multiple tags is cheap, as all the layers are reused. */
          
-         sh "echo Tests finished"
+         sh "echo CLEANUP"
+         sh "cd docker-volume-vsphere/; make clean-all; rm -fr docker-volume-vsphere/"
+         sh "echo PIPELINE FINISHED"
     }
 }
