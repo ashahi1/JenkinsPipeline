@@ -13,11 +13,20 @@ node("vdvs-slave-two") {
 
         sh "echo BUILDING IMAGE"
         sh "git clone https://github.com/ashahi1/docker-volume-vsphere.git"
-        sh "pwd"
-        sh "ls"
         sh "cd docker-volume-vsphere/; pwd; ls; make build-all"
         sh "echo FINISHED BUILDING IMAGE"
      
+    }
+
+    stage('Deploy image') {
+        /* This builds the actual image; */
+
+        sh "echo DEPLOYING IMAGE"
+        sh "ls"
+        sh "echo $ESX; echo $VM1; echo $VM2; echo $VM3;"
+        sh "cd docker-volume-vsphere/; make deploy-all"
+        sh "echo FINISHED DEPLOYING THE IMAGE"
+
     }
 
     stage('Test image') {
