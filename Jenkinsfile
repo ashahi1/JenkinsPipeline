@@ -13,7 +13,7 @@ node("vdvs-slave-two") {
 
         sh "echo BUILDING IMAGE"
         sh "git clone https://github.com/ashahi1/docker-volume-vsphere.git"
-        / *sh "cd docker-volume-vsphere/; make build-all" */
+        /* sh "cd docker-volume-vsphere/; make build-all" */
         sh "echo FINISHED BUILDING IMAGE"
      
     }
