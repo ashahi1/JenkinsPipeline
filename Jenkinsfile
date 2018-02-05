@@ -23,9 +23,9 @@ node("vdvs-slave-two") {
 
         /*
         sh "echo DEPLOYING IMAGE"
-        sh "ls"
-        sh "echo ESX = $ESX; echo VM-1=$VM1; echo VM-2=$VM2; echo VM-3=$VM3;"
-        sh "cd docker-volume-vsphere/; make deploy-all"
+       /* sh "ls" */
+      /*  sh "echo ESX = $ESX; echo VM-1=$VM1; echo VM-2=$VM2; echo VM-3=$VM3;" */
+      /*  sh "cd docker-volume-vsphere/; make deploy-all" */
         sh "echo FINISHED DEPLOYING THE IMAGE"*/
 
     }
@@ -35,8 +35,8 @@ node("vdvs-slave-two") {
          * For this example, we're using a Volkswagen-type approach ;-) */
 
             /*
-            sh "echo STARTING E2E TESTS"
-            sh "cd docker-volume-vsphere/; make test-e2e" */
+           /* sh "echo STARTING E2E TESTS" */
+           /* sh "cd docker-volume-vsphere/; make test-e2e" */
             
     }
 
