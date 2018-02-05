@@ -8,7 +8,7 @@ node("vdvs-slave-two") {
         checkout scm
     }
 
-    stage('Build') {
+    stage('Build stage') {
         /* This builds the actual image; */
 
         sh "echo BUILDING IMAGE"
