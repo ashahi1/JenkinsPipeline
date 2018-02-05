@@ -8,12 +8,12 @@ node("vdvs-slave-two") {
         checkout scm
     }
 
-    stage('Build') {
+    stage('Build Linux plugin') {
         /* This builds the actual image; */
 
         sh "echo BUILDING IMAGE"
         sh "git clone https://github.com/ashahi1/docker-volume-vsphere.git"
-        sh "cd docker-volume-vsphere/; make build-all"
+        / *sh "cd docker-volume-vsphere/; make build-all" */
         sh "echo FINISHED BUILDING IMAGE"
      
     }
@@ -21,11 +21,12 @@ node("vdvs-slave-two") {
     stage('Deploy') {
         /* This builds the actual image; */
 
+        /*
         sh "echo DEPLOYING IMAGE"
-        sh "ls"
-        sh "echo ESX = $ESX; echo VM-1=$VM1; echo VM-2=$VM2; echo VM-3=$VM3;"
-        sh "cd docker-volume-vsphere/; make deploy-all"
-        sh "echo FINISHED DEPLOYING THE IMAGE"
+       /* sh "ls" */
+      /*  sh "echo ESX = $ESX; echo VM-1=$VM1; echo VM-2=$VM2; echo VM-3=$VM3;" */
+      /*  sh "cd docker-volume-vsphere/; make deploy-all" */
+        sh "echo FINISHED DEPLOYING THE IMAGE"*/
 
     }
 
@@ -33,9 +34,41 @@ node("vdvs-slave-two") {
         /* Ideally, we would run a test framework against our image.
          * For this example, we're using a Volkswagen-type approach ;-) */
 
-            sh "echo STARTING E2E TESTS"
-            sh "cd docker-volume-vsphere/; make test-e2e"
+            /*
+           /* sh "echo STARTING E2E TESTS" */
+           /* sh "cd docker-volume-vsphere/; make test-e2e" */
             
+    }
+
+    stage('Build Windows plugin') {
+        /* This builds the actual image; */
+
+        sh "echo BUILDING Windows IMAGE"
+        /*sh "git clone https://github.com/ashahi1/docker-volume-vsphere.git" */
+        / *sh "cd docker-volume-vsphere/; make build-all" */
+        sh "make build-windows-plugin"
+        sh "echo FINISHED BUILDING IMAGE"
+
+    }
+
+    stage('Deploy Windows plugin') {
+        /* This builds the actual image; */
+
+        sh "echo DEPLOYING IMAGE"
+        sh "ls"
+        sh "echo Windows-VM = $WIN_VM1"
+        sh "cd docker-volume-vsphere/; make deploy-windows-plugin"
+        sh "echo FINISHED DEPLOYING THE IMAGE"
+
+    }
+
+   stage('Executing Windows Plugin Tests') {
+        /* Ideally, we would run a test framework against our image.
+         * For this example, we're using a Volkswagen-type approach ;-) */
+
+            sh "echo STARTING E2E TESTS"
+            sh "cd docker-volume-vsphere/; make test-e2e-windows"
+
     }
 
     stage('Cleanup') {
