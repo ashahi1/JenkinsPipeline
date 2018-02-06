@@ -1,7 +1,8 @@
 node("vdvs-slave-two") {
 
     def app
-    DIRECTORY = "docker-volume-vsphere"
+    DIRECTORY="docker-volume-vsphere"
+    sh "echo $DIRECTORY"
 
     stage('Clone repository') {
         /* Let's make sure we have the repository cloned to our workspace. */
@@ -14,12 +15,13 @@ node("vdvs-slave-two") {
         
         if [ -d "$DIRECTORY" ]; then
            # Control will enter here if $DIRECTORY exists.
+           sh "echo $DIRECTORY exists so deleting it."
            sh "rm -fr $DIRECTORY/"
         fi
 
         sh "echo BUILDING IMAGE"
         sh "git clone https://github.com/ashahi1/docker-volume-vsphere.git" 
-        sh "cd docker-volume-vsphere/; make build-all"  
+        sh "cd $DIRECTORY/; make build-all"  
         
      
     }
