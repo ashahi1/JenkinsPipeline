@@ -45,6 +45,7 @@ node("vdvs-slave-two") {
          sh "echo STARTING E2E TESTS" 
          sh "cd \$DIRECTORY/; make test-e2e || true"
          currentBuild.result = 'SUCCESS'
+
      }       
 
     stage('Build Windows plugin') {
@@ -71,9 +72,12 @@ node("vdvs-slave-two") {
         /* Ideally, we would run a test framework against our image.
          * For this example, we're using a Volkswagen-type approach ;-) */
 
-            sh "echo STARTING E2E TESTS"
-            sh "cd \$DIRECTORY/; make test-e2e-windows || true"
-
+            sh "echo STARTING WINDOWS TESTS"
+            def result = sh "cd docker-volume-vsphere/; make test-e2e-windows"
+            if (result != 0) {
+            echo '[FAILURE] Failed to build'
+            currentBuild.result = 'FAILURE'
+            }
     }
 
     stage('Cleanup') {
