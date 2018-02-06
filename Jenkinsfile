@@ -9,9 +9,7 @@ node("vdvs-slave-two") {
        sh "echo Deleting ${DIRECTORY} "
        deleteDir()
     }
-    
-    stages{
-
+   
         stage('Clone repository') {
         /* Let's make sure we have the repository cloned to our workspace */
 
@@ -102,7 +100,6 @@ node("vdvs-slave-two") {
                 sh "echo PIPELINE FINISHED"
             }
         }
-    }
 }
 
     def failTheBuild(String message) {
