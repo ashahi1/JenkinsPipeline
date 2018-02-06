@@ -1,8 +1,9 @@
 node("vdvs-slave-two") {
 
     def app
-    sh "DIRECTORY=docker-volume-vsphere"
-    sh "echo \$DIRECTORY"
+
+    sh '''sh "DIRECTORY=docker-volume-vsphere"
+    sh "echo \\$DIRECTORY" '''
 
     stage('Clone repository') {
         /* Let's make sure we have the repository cloned to our workspace. */
@@ -13,18 +14,15 @@ node("vdvs-slave-two") {
     stage('Build Linux plugin') {
         /* This builds the actual image; */
 
-        sh '''        
-        if [ -d "\$DIRECTORY" ]; then
+        sh '''if [ -d "\\$DIRECTORY" ]; then
            # Control will enter here if $DIRECTORY exists.
-           sh "echo \$DIRECTORY exists so deleting it."
-           sh "rm -fr \$DIRECTORY/"
-        fi
-        '''
+           sh "echo \\$DIRECTORY exists so deleting it."
+           sh "rm -fr \\$DIRECTORY/"
+        fi'''
 
-        sh "echo BUILDING IMAGE NEW"
-        sh "git clone https://github.com/ashahi1/docker-volume-vsphere.git" 
-        sh "cd \$DIRECTORY/; make build-all"  
-        
+        sh '''sh "echo BUILDING IMAGE NEW"
+        sh "git clone https://github.com/ashahi1/docker-volume-vsphere.git"
+        sh "cd \\$DIRECTORY/; make build-all" ''' 
      
     }
 
