@@ -24,6 +24,15 @@ node("vdvs-slave-two") {
      
     }
 
+    stage('Executing Windows Plugin Tests') {
+        try{        
+            sh "echo STARTING WINDOWS TESTS"
+            def result = sh "cd docker-volume-vsphere/; make test-e2e-windows"
+         } catch (err){
+           failTheBuild("Build failed")
+       }
+    }
+
     stage('Deploy') {
         /* This builds the actual image; */
 
@@ -37,11 +46,12 @@ node("vdvs-slave-two") {
     }
     
     stage('Executing End-to-End Tests') {
-     
+       try{   
          sh "echo STARTING E2E TESTS" 
-         sh "cd \${DIRECTORY}/; make test-e2e || true"
-         currentBuild.result = 'SUCCESS'
-
+         sh "cd \${DIRECTORY}/; make test-e2e"
+       } catch (err){
+           failTheBuild("Build failed")
+       }
      }       
 
     stage('Build Windows plugin') {
@@ -65,15 +75,12 @@ node("vdvs-slave-two") {
     }
 
    stage('Executing Windows Plugin Tests') {
-        /* Ideally, we would run a test framework against our image.
-         * For this example, we're using a Volkswagen-type approach ;-) */
-
+        try{        
             sh "echo STARTING WINDOWS TESTS"
             def result = sh "cd docker-volume-vsphere/; make test-e2e-windows"
-            if (result != 0) {
-            echo '[FAILURE] Failed to build'
-            currentBuild.result = 'FAILURE'
-            }
+         } catch (err){
+           failTheBuild("Build failed")
+       }
     }
 
     post {
@@ -84,4 +91,14 @@ node("vdvs-slave-two") {
          sh "echo PIPELINE FINISHED"
         }
     }
+}
+
+
+def failTheBuild(String message) {
+    def messageColor = "\u001B[32m"
+    def messageColorReset = "\u001B[0m"
+
+    currentBuild.result = "FAILURE"
+    echo messageColor + message + messageColorReset
+    error(message)
 }
