@@ -1,8 +1,8 @@
 node("vdvs-slave-two") {
 
     def app
-    DIRECTORY="docker-volume-vsphere"
-    sh "echo $DIRECTORY"
+    sh "DIRECTORY=docker-volume-vsphere"
+    sh "echo \$DIRECTORY"
 
     stage('Clone repository') {
         /* Let's make sure we have the repository cloned to our workspace. */
@@ -12,16 +12,18 @@ node("vdvs-slave-two") {
 
     stage('Build Linux plugin') {
         /* This builds the actual image; */
-        
-        if [ -d "$DIRECTORY" ]; then
+
+        sh '''        
+        if [ -d "\$DIRECTORY" ]; then
            # Control will enter here if $DIRECTORY exists.
-           sh "echo $DIRECTORY exists so deleting it."
-           sh "rm -fr $DIRECTORY/"
+           sh "echo \$DIRECTORY exists so deleting it."
+           sh "rm -fr \$DIRECTORY/"
         fi
+        '''
 
         sh "echo BUILDING IMAGE"
         sh "git clone https://github.com/ashahi1/docker-volume-vsphere.git" 
-        sh "cd $DIRECTORY/; make build-all"  
+        sh "cd \$DIRECTORY/; make build-all"  
         
      
     }
@@ -32,7 +34,7 @@ node("vdvs-slave-two") {
        sh "echo DEPLOYING IMAGE"
        sh "ls" 
        sh "echo ESX = $ESX; echo VM-1=$VM1; echo VM-2=$VM2; echo VM-3=$VM3;" 
-       sh "cd $DIRECTORY/; make deploy-all" 
+       sh "cd \$DIRECTORY/; make deploy-all" 
        sh "echo FINISHED DEPLOYING THE IMAGE"
       
 
@@ -43,7 +45,7 @@ node("vdvs-slave-two") {
          * For this example, we're using a Volkswagen-type approach ;-) */
      
          sh "echo STARTING E2E TESTS" 
-         sh "cd $DIRECTORY/; make test-e2e || true"
+         sh "cd \$DIRECTORY/; make test-e2e || true"
          currentBuild.result = 'SUCCESS'
      }       
 
@@ -62,7 +64,7 @@ node("vdvs-slave-two") {
         sh "echo DEPLOYING IMAGE"
         sh "ls"
         sh "echo Windows-VM = $WIN_VM1"
-        sh "cd $DIRECTORY/; make deploy-windows-plugin"
+        sh "cd \$DIRECTORY/; make deploy-windows-plugin"
         sh "echo FINISHED DEPLOYING THE IMAGE"
 
     }
@@ -72,7 +74,7 @@ node("vdvs-slave-two") {
          * For this example, we're using a Volkswagen-type approach ;-) */
 
             sh "echo STARTING E2E TESTS"
-            sh "cd $DIRECTORY/; make test-e2e-windows || true"
+            sh "cd \$DIRECTORY/; make test-e2e-windows || true"
 
     }
 
@@ -83,7 +85,7 @@ node("vdvs-slave-two") {
          * Pushing multiple tags is cheap, as all the layers are reused. */
          
          sh "echo CLEANUP"
-         sh "cd $DIRECTORY/; make clean-all; rm -fr $DIRECTORY/"
+         sh "cd \$DIRECTORY/; make clean-all; rm -fr \$DIRECTORY/"
          sh "echo PIPELINE FINISHED"
     }
 }
