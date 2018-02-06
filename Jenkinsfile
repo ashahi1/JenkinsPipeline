@@ -1,12 +1,9 @@
 node("vdvs-slave-two") {
 
     def app
-    environment {
-     DIRECTORY = "docker-volume-vsphere"
-   }
-  
-  
-
+    
+    def DIRECTORY = 'docker-volume-vsphere'
+   
     dir('docker-volume-vsphere') {
        sh "echo Trying again to delete ${DIRECTORY} "
        deleteDir()
@@ -46,8 +43,6 @@ node("vdvs-slave-two") {
     }
     
     stage('Executing End-to-End Tests') {
-        /* Ideally, we would run a test framework against our image.
-         * For this example, we're using a Volkswagen-type approach ;-) */
      
          sh "echo STARTING E2E TESTS" 
          sh "cd \${DIRECTORY}/; make test-e2e || true"
