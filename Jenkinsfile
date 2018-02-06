@@ -2,6 +2,9 @@ node("vdvs-slave-two") {
 
     def app
 
+    dir('docker-volume-vsphere') {
+       deleteDir()
+    }
     sh '''sh "DIRECTORY=docker-volume-vsphere"
     sh "echo \\$DIRECTORY" '''
 
@@ -80,14 +83,12 @@ node("vdvs-slave-two") {
             }
     }
 
-    stage('Cleanup') {
-        /* Finally, we'll push the image with two tags:
-         * First, the incremental build number from Jenkins
-         * Second, the 'latest' tag.
-         * Pushing multiple tags is cheap, as all the layers are reused. */
+    post {
+         always {
          
          sh "echo CLEANUP"
          sh "cd \$DIRECTORY/; make clean-all; rm -fr \$DIRECTORY/"
          sh "echo PIPELINE FINISHED"
+        }
     }
 }
