@@ -2,6 +2,7 @@ node("vdvs-slave-two") {
 
     def app
 
+    sh "echo Trying again"
     sh '''sh "DIRECTORY=docker-volume-vsphere"
     sh "echo \\$DIRECTORY" '''
 
@@ -16,7 +17,7 @@ node("vdvs-slave-two") {
 
         sh '''if [ -d "\\$DIRECTORY" ]; then
            # Control will enter here if $DIRECTORY exists.
-           sh "echo \\$DIRECTORY exists so deleting it."
+           sh "echo \\$DIRECTORY exists so DELETING it."
            sh "rm -fr \\$DIRECTORY/"
         fi'''
 
