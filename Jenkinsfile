@@ -34,27 +34,23 @@ node("vdvs-slave-two") {
             sh "echo FINISHED DEPLOYING THE IMAGE"
         }
     
-        stage('vFile Tests') {
-         /* This runs the tests for vFile Plugin */
-            
-            try{        
-                sh "echo Build, deploy and test vFile plugin"
-                sh "cd docker-volume-vsphere/; make build-vfile-all ; make deploy-vfile-plugin; make test-e2e-vfile || ${ERROR}=true"
-            } catch (err){
-                failTheBuild("Build failed")
-            }
-        }
-
         stage('Executing End-to-End Tests') {
             /* This runs the e2e test */
-            
-            try{   
-                sh "echo STARTING E2E TESTS" 
-                sh "cd \${DIRECTORY}/; make test-e2e || ${ERROR}=true"
-            } catch (err){
-                failTheBuild("Build failed")
-            }
+             
+            sh "echo STARTING E2E TESTS" 
+            sh "cd \${DIRECTORY}/; make test-e2e || ${ERROR}=true"
+            sh "cd \${DIRECTORY}/; make test-esx || ${ERROR}=true"
+            sh "cd \${DIRECTORY}/; make test-vm || ${ERROR}=true"
         }       
+
+
+        stage('vFile Tests') {
+         /* This runs the tests for vFile Plugin */
+                   
+            sh "echo Build, deploy and test vFile plugin"
+            sh "cd docker-volume-vsphere/; make build-vfile-all ; make deploy-vfile-plugin; make test-e2e-vfile || ${ERROR}=true"
+            
+        }
 
         stage('Build Windows plugin') {
         /* This builds the actual windows image; */
@@ -77,13 +73,9 @@ node("vdvs-slave-two") {
 
         stage('Executing Windows Plugin Tests') {
          /* This runs the tests for Windows Plugin */
-            
-            try{        
+                  
                 sh "echo STARTING WINDOWS TESTS"
-                def result = sh "cd docker-volume-vsphere/; make test-e2e-windows"
-            } catch (err){
-                failTheBuild("Build failed")
-            }
+                def result = sh "cd docker-volume-vsphere/; make test-e2e-windows"  
         }
         post {
             always {
@@ -101,12 +93,3 @@ node("vdvs-slave-two") {
             }
         }
 }
-
-    def failTheBuild(String message) {
-        def messageColor = "\u001B[32m"
-        def messageColorReset = "\u001B[0m"
-
-        currentBuild.result = "FAILURE"
-        echo messageColor + message + messageColorReset
-        error(message)
-    }
