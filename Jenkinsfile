@@ -103,7 +103,7 @@ node("vdvs-slave-two") {
             }
         }
     }
-
+}
 
     def failTheBuild(String message) {
         def messageColor = "\u001B[32m"
