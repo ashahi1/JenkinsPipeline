@@ -18,15 +18,9 @@ node("vdvs-slave-two") {
     stage('Build Linux plugin') {
         /* This builds the actual image; */
 
-        sh '''if [ -d "\\${DIRECTORY}" ]; then
-           # Control will enter here if ${DIRECTORY} exists.
-           sh "echo \\${DIRECTORY} exists so DELETING it."
-           sh "rm -fr \\${DIRECTORY}/"
-        fi'''
-
-        sh '''sh "echo BUILDING IMAGE NEW"
+        sh "echo BUILDING IMAGE NEW"
         sh "git clone https://github.com/ashahi1/docker-volume-vsphere.git"
-        sh "cd \\${DIRECTORY}/; make build-all" ''' 
+        sh "cd \\${DIRECTORY}/; make build-all" 
      
     }
 
